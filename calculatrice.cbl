@@ -15,30 +15,20 @@
        PROCEDURE DIVISION.
       * Début du programme principal
        DEBUT.
-       PERFORM UNTIL WS-FINALE = "O" OR WS-FINALE = "o"  
-           DISPLAY "--Vous pouvez maintenant calculer--"
-           DISPLAY "Entrez le premier chiffre"
-           ACCEPT WS-NUMERO-A
+       PERFORM UNTIL WS-FINALE = "O" OR "o"  
+             DISPLAY "--Vous pouvez maintenant calculer--"
+             DISPLAY "Entrez le premier chiffre"
+             ACCEPT WS-NUMERO-A
 
-           DISPLAY "Choisissez l'operation (+, -, /, *)"
-           ACCEPT WS-OPERATION
-
-P          PERFORM UNTIL WS-OPERATION = '+' OR '-' 
-             OR '*' OR  '/'
+           MOVE SPACE TO WS-OPERATION 
+P          PERFORM UNTIL WS-OPERATION = '+' OR '-' OR '*' OR  '/'
              DISPLAY "Choisissez l'un de ces operations (+, -, /, *)"
              ACCEPT WS-OPERATION
            END-PERFORM
 
            DISPLAY "Entrez le deuxiéme chiffre"
-           ACCEPT WS-NUMERO-B
-
-           IF WS-NUMERO-B = 0
-            PERFORM UNTIL WS-NUMERO-B NOT = 0
-             DISPLAY "Veuillez entrer un autre chiffre que (0)"
              ACCEPT WS-NUMERO-B
-            END-PERFORM
-           END-IF
-            
+        
            EVALUATE WS-OPERATION 
                WHEN "+"
                COMPUTE WS-RESULTANT = WS-NUMERO-A + WS-NUMERO-B
@@ -47,11 +37,15 @@ P          PERFORM UNTIL WS-OPERATION = '+' OR '-'
                COMPUTE WS-RESULTANT = WS-NUMERO-A - WS-NUMERO-B
 
                WHEN "/"
-                     COMPUTE WS-RESULTANT = WS-NUMERO-A / WS-NUMERO-B   
-
+                   *> Vérification si WS-NUMERO-B est zéro pour la division
+                   PERFORM UNTIL WS-NUMERO-B NOT = 0
+                      DISPLAY "Veuillez entrer un autre chiffre que(0)"
+                      ACCEPT WS-NUMERO-B
+                   END-PERFORM
+                   COMPUTE WS-RESULTANT = WS-NUMERO-A / WS-NUMERO-B 
+  
                WHEN "*"
-               COMPUTE WS-RESULTANT = WS-NUMERO-A * WS-NUMERO-B
-                  
+               COMPUTE WS-RESULTANT = WS-NUMERO-A * WS-NUMERO-B  
            END-EVALUATE
 
       * Afficher le résultat du calcul
